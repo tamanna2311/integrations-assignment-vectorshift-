@@ -1,6 +1,6 @@
 # VectorShift Integrations Assessment
 
-Hey team! 👋 Here's my submission for the integrations technical assessment. 
+Hey team, here's my submission for the integrations technical assessment. 
 
 I've completed both parts of the assignment: implementing the HubSpot OAuth flow and the data loading logic to fetch contacts, companies, and deals.
 
