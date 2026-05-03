@@ -27,7 +27,7 @@ export const NotionIntegration = ({ user, org, integrationParams, setIntegration
 
             // Polling for the window to close
             const pollTimer = window.setInterval(() => {
-                if (newWindow?.closed !== false) { 
+                if (newWindow?.closed !== false) {
                     window.clearInterval(pollTimer);
                     handleWindowClosed();
                 }
@@ -45,7 +45,7 @@ export const NotionIntegration = ({ user, org, integrationParams, setIntegration
             formData.append('user_id', user);
             formData.append('org_id', org);
             const response = await axios.post(`http://localhost:8000/integrations/notion/credentials`, formData);
-            const credentials = response.data; 
+            const credentials = response.data;
             if (credentials) {
                 setIsConnecting(false);
                 setIsConnected(true);
@@ -63,25 +63,22 @@ export const NotionIntegration = ({ user, org, integrationParams, setIntegration
     }, []);
 
     return (
-        <>
-        <Box sx={{mt: 2}}>
-            Parameters
-            <Box display='flex' alignItems='center' justifyContent='center' sx={{mt: 2}}>
-                <Button 
-                    variant='contained' 
-                    onClick={isConnected ? () => {} :handleConnectClick}
-                    color={isConnected ? 'success' : 'primary'}
+        <div style={{ marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '16px' }}>
+                <button
+                    className={`gradient-button ${isConnected ? 'success' : ''}`}
+                    onClick={isConnected ? () => { } : handleConnectClick}
                     disabled={isConnecting}
                     style={{
                         pointerEvents: isConnected ? 'none' : 'auto',
                         cursor: isConnected ? 'default' : 'pointer',
-                        opacity: isConnected ? 1 : undefined
+                        opacity: isConnected ? 1 : undefined,
+                        width: '100%'
                     }}
                 >
-                    {isConnected ? 'Notion Connected' : isConnecting ? <CircularProgress size={20} /> : 'Connect to Notion'}
-                </Button>
-            </Box>
-        </Box>
-      </>
+                    {isConnected ? 'Notion Connected ✅' : isConnecting ? 'Connecting...' : 'Connect to Notion'}
+                </button>
+            </div>
+        </div>
     );
 }

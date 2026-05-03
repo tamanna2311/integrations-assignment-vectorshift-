@@ -63,25 +63,22 @@ export const HubSpotIntegration = ({ user, org, integrationParams, setIntegratio
     }, []);
 
     return (
-        <>
-            <Box sx={{ mt: 2 }}>
-                Parameters
-                <Box display='flex' alignItems='center' justifyContent='center' sx={{ mt: 2 }}>
-                    <Button
-                        variant='contained'
-                        onClick={isConnected ? () => { } : handleConnectClick}
-                        color={isConnected ? 'success' : 'primary'}
-                        disabled={isConnecting}
-                        style={{
-                            pointerEvents: isConnected ? 'none' : 'auto',
-                            cursor: isConnected ? 'default' : 'pointer',
-                            opacity: isConnected ? 1 : undefined
-                        }}
-                    >
-                        {isConnected ? 'HubSpot Connected' : isConnecting ? <CircularProgress size={20} /> : 'Connect to HubSpot'}
-                    </Button>
-                </Box>
-            </Box>
-        </>
+        <div style={{ marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '16px' }}>
+                <button
+                    className={`gradient-button ${isConnected ? 'success' : ''}`}
+                    onClick={isConnected ? () => { } : handleConnectClick}
+                    disabled={isConnecting}
+                    style={{
+                        pointerEvents: isConnected ? 'none' : 'auto',
+                        cursor: isConnected ? 'default' : 'pointer',
+                        opacity: isConnected ? 1 : undefined,
+                        width: '100%'
+                    }}
+                >
+                    {isConnected ? 'HubSpot Connected ✅' : isConnecting ? 'Connecting...' : 'Connect to HubSpot'}
+                </button>
+            </div>
+        </div>
     );
 }

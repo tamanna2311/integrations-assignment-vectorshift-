@@ -1,9 +1,4 @@
 import { useState } from 'react';
-import {
-    Box,
-    TextField,
-    Button,
-} from '@mui/material';
 import axios from 'axios';
 
 const endpointMapping = {
@@ -29,30 +24,30 @@ export const DataForm = ({ integrationType, credentials }) => {
     }
 
     return (
-        <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column' width='100%'>
-            <Box display='flex' flexDirection='column' width='100%'>
-                <TextField
-                    label="Loaded Data"
-                    value={loadedData || ''}
-                    sx={{ mt: 2 }}
-                    InputLabelProps={{ shrink: true }}
-                    disabled
-                />
-                <Button
+        <div style={{ width: '100%' }}>
+            <div style={{ marginBottom: '16px' }}>
+                <label className="custom-label">Loaded Data</label>
+                <div className="data-display">
+                    {loadedData ? JSON.stringify(loadedData, null, 2) : 'No data loaded yet. Click "Load Data" to fetch.'}
+                </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+                <button
                     onClick={handleLoad}
-                    sx={{ mt: 2 }}
-                    variant='contained'
+                    className="gradient-button"
+                    style={{ flex: 1 }}
                 >
                     Load Data
-                </Button>
-                <Button
+                </button>
+                <button
                     onClick={() => setLoadedData(null)}
-                    sx={{ mt: 1 }}
-                    variant='contained'
+                    className="gradient-button"
+                    style={{ flex: 1, background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}
                 >
                     Clear Data
-                </Button>
-            </Box>
-        </Box>
+                </button>
+            </div>
+        </div>
     );
 }

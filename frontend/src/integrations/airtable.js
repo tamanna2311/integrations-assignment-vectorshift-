@@ -26,7 +26,7 @@ export const AirtableIntegration = ({ user, org, integrationParams, setIntegrati
 
             // Polling for the window to close
             const pollTimer = window.setInterval(() => {
-                if (newWindow?.closed !== false) { 
+                if (newWindow?.closed !== false) {
                     window.clearInterval(pollTimer);
                     handleWindowClosed();
                 }
@@ -44,7 +44,7 @@ export const AirtableIntegration = ({ user, org, integrationParams, setIntegrati
             formData.append('user_id', user);
             formData.append('org_id', org);
             const response = await axios.post(`http://localhost:8000/integrations/airtable/credentials`, formData);
-            const credentials = response.data; 
+            const credentials = response.data;
             if (credentials) {
                 setIsConnecting(false);
                 setIsConnected(true);
@@ -62,25 +62,22 @@ export const AirtableIntegration = ({ user, org, integrationParams, setIntegrati
     }, []);
 
     return (
-        <>
-        <Box sx={{mt: 2}}>
-            Parameters
-            <Box display='flex' alignItems='center' justifyContent='center' sx={{mt: 2}}>
-                <Button 
-                    variant='contained' 
-                    onClick={isConnected ? () => {} :handleConnectClick}
-                    color={isConnected ? 'success' : 'primary'}
+        <div style={{ marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '16px' }}>
+                <button
+                    className={`gradient-button ${isConnected ? 'success' : ''}`}
+                    onClick={isConnected ? () => { } : handleConnectClick}
                     disabled={isConnecting}
                     style={{
                         pointerEvents: isConnected ? 'none' : 'auto',
                         cursor: isConnected ? 'default' : 'pointer',
-                        opacity: isConnected ? 1 : undefined
+                        opacity: isConnected ? 1 : undefined,
+                        width: '100%'
                     }}
                 >
-                    {isConnected ? 'Airtable Connected' : isConnecting ? <CircularProgress size={20} /> : 'Connect to Airtable'}
-                </Button>
-            </Box>
-        </Box>
-      </>
+                    {isConnected ? 'Airtable Connected ✅' : isConnecting ? 'Connecting...' : 'Connect to Airtable'}
+                </button>
+            </div>
+        </div>
     );
 }
