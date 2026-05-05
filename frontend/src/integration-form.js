@@ -48,9 +48,6 @@ export const IntegrationForm = () => {
                             className={`integration-option ${currType === type ? 'selected' : ''}`}
                             onClick={() => setCurrType(type)}
                         >
-                            <div className="integration-icon">
-                                {type === 'Notion' ? '📝' : type === 'Airtable' ? '📊' : '🚀'}
-                            </div>
                             <div style={{ fontWeight: 600 }}>{type}</div>
                         </div>
                     ))}
