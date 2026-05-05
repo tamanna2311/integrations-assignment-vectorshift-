@@ -10,10 +10,10 @@ This document details all the changes I made to the codebase.
 - Added imports for `json`, `os`, `secrets`, `base64`, `urllib.parse`, `asyncio`, `httpx`, `HTTPException`, `HTMLResponse`.
 - Defined environment variables for `CLIENT_ID`, `CLIENT_SECRET`, and `REDIRECT_URI` so they can be configured without touching the code.
 - Defined the OAuth `SCOPES` required: `oauth crm.objects.contacts.read crm.objects.companies.read crm.objects.deals.read`.
-- Implemented `authorize_hubspot(user_id, org_id)` — generates a secure random state, stores it in Redis, and returns the HubSpot OAuth authorization URL.
-- Implemented `oauth2callback_hubspot(request)` — handles the OAuth callback from HubSpot, validates the state to prevent CSRF attacks, exchanges the authorization code for access/refresh tokens, stores them in Redis, and returns HTML that closes the popup window.
-- Implemented `get_hubspot_credentials(user_id, org_id)` — retrieves stored credentials from Redis and cleans up the key.
-- Implemented `create_integration_item_metadata_object(response_json, item_type, portal_id)` — maps HubSpot API responses to the standard `IntegrationItem` format with names, IDs, timestamps, and direct URLs to HubSpot records.
+- Implemented `authorize_hubspot(user_id, org_id)`: generates a secure random state, stores it in Redis, and returns the HubSpot OAuth authorization URL.
+- Implemented `oauth2callback_hubspot(request)`: handles the OAuth callback from HubSpot, validates the state to prevent CSRF attacks, exchanges the authorization code for access/refresh tokens, stores them in Redis, and returns HTML that closes the popup window.
+- Implemented `get_hubspot_credentials(user_id, org_id)`: retrieves stored credentials from Redis and cleans up the key.
+- Implemented `create_integration_item_metadata_object(response_json, item_type, portal_id)`: maps HubSpot API responses to the standard `IntegrationItem` format with names, IDs, timestamps, and direct URLs to HubSpot records.
 
 ### 2. `backend/main.py`
 **Action:** Modified existing file.
@@ -25,8 +25,8 @@ This document details all the changes I made to the codebase.
 
 ### 3. `backend/integrations/hubspot.py` (continued)
 **What I did:**
-- Implemented `get_items_hubspot(credentials)` — parses the credentials, fetches contacts, companies, and deals concurrently using `asyncio.gather` for better performance, and maps results to `IntegrationItem` objects.
-- Added automatic token refresh — if the access token is expired and the API returns a 401, it uses the refresh token to get a new access token and retries the request.
+- Implemented `get_items_hubspot(credentials)`: parses the credentials, fetches contacts, companies, and deals concurrently using `asyncio.gather` for better performance, and maps results to `IntegrationItem` objects.
+- Added automatic token refresh: if the access token is expired and the API returns a 401, it uses the refresh token to get a new access token and retries the request.
 - Implemented pagination support using HubSpot's `paging.next.after` cursor so all records are fetched, not just the first page.
 
 ## Part 3: HubSpot Frontend Integration
@@ -35,9 +35,9 @@ This document details all the changes I made to the codebase.
 **Action:** Created new file.
 **What I did:**
 - Created the `HubSpotIntegration` React component.
-- Implemented `handleConnectClick` — opens a popup window to the backend's `/integrations/hubspot/authorize` endpoint and polls every 200ms for the window to close.
-- Implemented `handleWindowClosed` — calls the backend's `/integrations/hubspot/credentials` endpoint to retrieve credentials once the popup closes, and updates the integration state.
-- Added a button that toggles between "Connect to HubSpot" and "HubSpot Connected ✅" based on the connection state.
+- Implemented `handleConnectClick`: opens a popup window to the backend's `/integrations/hubspot/authorize` endpoint and polls every 200ms for the window to close.
+- Implemented `handleWindowClosed`: calls the backend's `/integrations/hubspot/credentials` endpoint to retrieve credentials once the popup closes, and updates the integration state.
+- Added a button that toggles between "Connect to HubSpot" and "HubSpot Connected" based on the connection state.
 
 ### 5. `frontend/src/integration-form.js`
 **Action:** Modified existing file.
@@ -88,5 +88,14 @@ This document details all the changes I made to the codebase.
 **Action:** Modified existing files.
 **What I did:**
 - Replaced MUI Button and CircularProgress components with custom gradient buttons.
-- Added green success styling when connected with a ✅ indicator.
+- Added green success styling when connected.
 - Removed MUI dependencies from all three files.
+
+## Part 5: Backend Fixes & Real Credentials
+
+### 12. `backend/requirements.txt` & Environment
+**Action:** Installed missing dependencies.
+**What I did:**
+- Installed `redis`, `kombu`, and `python-multipart` into the Python environment to fix module import errors when running `uvicorn`.
+- Reverted `hubspot.py` from the mocked demo version back to the real production OAuth code.
+- Restarted the backend using the real HubSpot Client ID and Client Secret provided by the user.
